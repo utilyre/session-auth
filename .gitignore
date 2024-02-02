@@ -1,0 +1,5 @@
+*.local
+*.log
+
+/build
+/data.db
