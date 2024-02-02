@@ -1,4 +1,4 @@
-module github.com/utilyre/ex
+module github.com/utilyre/session-auth
 
 go 1.21.5
 

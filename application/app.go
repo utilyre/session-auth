@@ -14,8 +14,8 @@ import (
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/sqlitedialect"
 	"github.com/uptrace/bun/driver/sqliteshim"
-	"github.com/utilyre/ex/config"
-	"github.com/utilyre/ex/routes"
+	"github.com/utilyre/session-auth/config"
+	"github.com/utilyre/session-auth/routes"
 	"github.com/utilyre/xmate"
 )
 

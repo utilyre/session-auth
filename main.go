@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/utilyre/ex/application"
-	"github.com/utilyre/ex/config"
+	"github.com/utilyre/session-auth/application"
+	"github.com/utilyre/session-auth/config"
 )
 
 func main() {
