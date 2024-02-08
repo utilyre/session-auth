@@ -83,6 +83,13 @@ func (app *Application) Setup() *Application {
 		DB:         app.db,
 	}.Router())
 
+	app.router.Mount("/me", routes.Me{
+		Handler:    app.handler,
+		SecretView: app.views.Lookup("secret"),
+		SCookie:    app.scookie,
+		DB:         app.db,
+	}.Router())
+
 	return app
 }
 
