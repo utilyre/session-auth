@@ -1,6 +1,7 @@
 package config
 
 import (
+	"encoding/hex"
 	"errors"
 	"flag"
 	"fmt"
@@ -53,6 +54,8 @@ type Config struct {
 
 	ServerAddr string
 	DSN        string
+	HashKey    []byte
+	BlockKey   []byte
 }
 
 func Load() Config {
@@ -101,6 +104,18 @@ func Load() Config {
 	}
 
 	cfg.DSN = os.Getenv("DSN")
+
+	hashKey, err := hex.DecodeString(os.Getenv("HASH_KEY"))
+	if err != nil {
+		panic(err)
+	}
+	cfg.HashKey = hashKey
+
+	blockKey, err := hex.DecodeString(os.Getenv("BLOCK_KEY"))
+	if err != nil {
+		panic(err)
+	}
+	cfg.BlockKey = blockKey
 
 	return cfg
 }

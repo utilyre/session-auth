@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/gorilla/securecookie"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/sqlitedialect"
 	"github.com/uptrace/bun/driver/sqliteshim"
@@ -25,6 +26,7 @@ type Application struct {
 	views   *template.Template
 	router  chi.Router
 	handler xmate.ErrorHandler
+	scookie *securecookie.SecureCookie
 	db      *bun.DB
 }
 
@@ -39,6 +41,7 @@ func New(cfg config.Config) *Application {
 
 	router := chi.NewRouter()
 	handler := newHandler(logger, views.Lookup("error"))
+	scookie := securecookie.New(cfg.HashKey, cfg.BlockKey)
 
 	logger.Info("opening connection to database", "dsn", cfg.DSN)
 	sqldb, err := sql.Open(sqliteshim.ShimName, cfg.DSN)
@@ -54,6 +57,7 @@ func New(cfg config.Config) *Application {
 		views:   views,
 		router:  router,
 		handler: handler,
+		scookie: scookie,
 		db:      db,
 	}
 }
@@ -75,6 +79,7 @@ func (app *Application) Setup() *Application {
 		Handler:    app.handler,
 		SignupView: app.views.Lookup("signup"),
 		LoginView:  app.views.Lookup("login"),
+		SCookie:    app.scookie,
 		DB:         app.db,
 	}.Router())
 
