@@ -71,7 +71,7 @@ func (app *Application) Setup() *Application {
 		HomeView: app.views.Lookup("home"),
 	}.Router())
 
-	app.router.Mount("/users", routes.UserRoute{
+	app.router.Mount("/users", routes.Users{
 		Handler:    app.handler,
 		SignupView: app.views.Lookup("signup"),
 		LoginView:  app.views.Lookup("login"),

@@ -13,7 +13,6 @@ require (
 	github.com/uptrace/bun/dialect/sqlitedialect v1.1.17
 	github.com/uptrace/bun/driver/sqliteshim v1.1.17
 	golang.org/x/crypto v0.18.0
-	modernc.org/sqlite v1.28.0
 )
 
 require (
@@ -37,6 +36,7 @@ require (
 	modernc.org/mathutil v1.6.0 // indirect
 	modernc.org/memory v1.7.2 // indirect
 	modernc.org/opt v0.1.3 // indirect
+	modernc.org/sqlite v1.28.0 // indirect
 	modernc.org/strutil v1.2.0 // indirect
 	modernc.org/token v1.1.0 // indirect
 )

@@ -1,45 +1,39 @@
 package routes
 
 import (
-	"errors"
 	"html/template"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/uptrace/bun"
 	"github.com/utilyre/session-auth/models"
-	"github.com/utilyre/session-auth/utils"
 	"github.com/utilyre/xmate"
 	"golang.org/x/crypto/bcrypt"
 )
 
-var (
-	ErrUserDuplicated = xmate.NewHTTPError(http.StatusConflict, "user already exists")
-)
-
-type UserRoute struct {
+type Users struct {
 	Handler    xmate.ErrorHandler
 	SignupView *template.Template
 	LoginView  *template.Template
 	DB         *bun.DB
 }
 
-func (ur UserRoute) Router() chi.Router {
+func (u Users) Router() chi.Router {
 	r := chi.NewRouter()
 
-	r.Get("/signup", ur.Handler.HandleFunc(ur.signup))
+	r.Get("/signup", u.Handler.HandleFunc(u.signup))
 	// r.Get("/login", ur.login)
 
-	r.Post("/signup", ur.Handler.HandleFunc(ur.handleSignup))
+	r.Post("/signup", u.Handler.HandleFunc(u.handleSignup))
 
 	return r
 }
 
-func (ur UserRoute) signup(w http.ResponseWriter, r *http.Request) error {
-	return xmate.WriteHTML(w, ur.SignupView, http.StatusOK, nil)
+func (u Users) signup(w http.ResponseWriter, r *http.Request) error {
+	return xmate.WriteHTML(w, u.SignupView, http.StatusOK, nil)
 }
 
-func (ur UserRoute) handleSignup(w http.ResponseWriter, r *http.Request) error {
+func (u Users) handleSignup(w http.ResponseWriter, r *http.Request) error {
 	if err := r.ParseForm(); err != nil {
 		return err
 	}
@@ -59,15 +53,10 @@ func (ur UserRoute) handleSignup(w http.ResponseWriter, r *http.Request) error {
 		Name:     name,
 	}
 
-	if _, err := ur.DB.NewInsert().Model(user).Exec(r.Context()); err != nil {
-		err = utils.WrapDBErr(err)
-		if errors.Is(err, utils.ErrDuplicatedKey) {
-			return ErrUserDuplicated
-		}
-
+	if _, err := u.DB.NewInsert().Model(user).Exec(r.Context()); err != nil {
 		return err
 	}
 
-	w.Header().Set("HX-Redirect", "/")
-	return xmate.WriteText(w, http.StatusCreated, "user created successfully")
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+	return nil
 }
